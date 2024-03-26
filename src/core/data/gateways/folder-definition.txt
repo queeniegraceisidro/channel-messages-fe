@@ -1,0 +1,1 @@
+Contains gateways/interface to interact with DB and external libraries to our application

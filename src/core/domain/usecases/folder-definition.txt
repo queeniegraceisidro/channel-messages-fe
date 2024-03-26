@@ -1,0 +1,5 @@
+Contains the app-specific logic.
+
+The use cases are mostly concerned with the orchestration between the layers,
+in this layer we can probably expect the calling of gateways, setting the data to the presenters,
+and other stuff that are primarily concerned with engineering logic.

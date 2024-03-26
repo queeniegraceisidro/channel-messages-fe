@@ -1,0 +1,1 @@
+Contains business rules that we could use for other parts of the code.
