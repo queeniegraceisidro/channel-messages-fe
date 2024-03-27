@@ -1,10 +1,15 @@
 import { SidebarView } from './sidebar.view'
 
 
-export interface ISidebarContainerViewModel { }
+export interface ISidebarContainerViewModel {
+  onToggleSidebar: () => void
+  sidebarOpen: boolean
+}
 
 export const SidebarContainer: React.FC<ISidebarContainerViewModel> = (props) => {
 
-  return <SidebarView />
-
+  return <SidebarView
+    onToggleSidebar={props.onToggleSidebar}
+    sidebarOpen={props.sidebarOpen}
+  />
 }

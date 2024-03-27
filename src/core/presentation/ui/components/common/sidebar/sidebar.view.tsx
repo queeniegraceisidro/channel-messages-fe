@@ -9,7 +9,10 @@ import MuiDrawer from '@mui/material/Drawer';
 import { mainListItems, secondaryListItems } from './listItems';
 
 
-export interface ISidebarViewModel { }
+export interface ISidebarViewModel {
+  onToggleSidebar: () => void
+  sidebarOpen: boolean
+}
 
 const drawerWidth: number = 240;
 
@@ -41,13 +44,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
 
   return (
-    <Drawer variant="permanent" open={open}>
+    <Drawer variant="permanent" open={props.sidebarOpen}>
       <Toolbar
         sx={{
           display: 'flex',
@@ -56,7 +55,7 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
           px: [1],
         }}
       >
-        <IconButton onClick={toggleDrawer}>
+        <IconButton onClick={props.onToggleSidebar}>
           <ChevronLeftIcon />
         </IconButton>
       </Toolbar>

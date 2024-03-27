@@ -8,7 +8,10 @@ import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
-export interface INavbarViewModel { }
+export interface INavbarViewModel {
+  onToggleSidebar: () => void
+  sidebarOpen: boolean
+}
 
 const drawerWidth: number = 240;
 
@@ -35,12 +38,9 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export const NavbarView: React.FC<INavbarViewModel> = (props) => {
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+
   return (
-    <AppBar position="absolute" open={open}>
+    <AppBar position="absolute" open={props.sidebarOpen}>
       <Toolbar
         sx={{
           pr: '24px', // keep right padding when drawer closed
@@ -50,10 +50,10 @@ export const NavbarView: React.FC<INavbarViewModel> = (props) => {
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={toggleDrawer}
+          onClick={props.onToggleSidebar}
           sx={{
             marginRight: '36px',
-            ...(open && { display: 'none' }),
+            ...(props.sidebarOpen && { display: 'none' }),
           }}
         >
           <MenuIcon />
