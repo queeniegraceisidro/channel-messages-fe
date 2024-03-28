@@ -2,9 +2,13 @@ import { BaseLayoutContainer } from '../../components/common/layouts/base-layout
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import joinChannelImage from '../../../media/join-channel.jpg'
 import createChannelImage from '../../../media/create-channel.jpg'
+import { CreateChannelModal } from '../../components/dashboard/create-channel-modal/create-modal.container';
 
 export interface IDashboardViewModel {
   children?: React.ReactNode
+  showModal: boolean
+  handleCreateModalShow: () => void
+  handleCreateModalClose: () => void
 }
 
 const DashboardView: React.FC<IDashboardViewModel> = (props) => {
@@ -31,7 +35,7 @@ const DashboardView: React.FC<IDashboardViewModel> = (props) => {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column' }}>
+          <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column' }} onClick={props.handleCreateModalShow}>
             <CardActionArea>
               <CardMedia
                 component="img"
@@ -51,7 +55,8 @@ const DashboardView: React.FC<IDashboardViewModel> = (props) => {
           </Card>
         </Grid>
       </Grid>
-    </BaseLayoutContainer>
+      <CreateChannelModal show={props.showModal} handleClose={props.handleCreateModalClose} />
+    </BaseLayoutContainer >
   )
 }
 
