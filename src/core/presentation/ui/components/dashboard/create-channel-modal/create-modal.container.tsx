@@ -1,6 +1,5 @@
-import React from 'react'
+import CreateChannelModalController from './create-modal.controller'
 import CreateChannelModalView from './create-model.view'
-
 
 interface ICreateChannelModalContainerViewModel {
   children?: React.ReactNode
@@ -9,8 +8,10 @@ interface ICreateChannelModalContainerViewModel {
 }
 
 export const CreateChannelModal: React.FC<ICreateChannelModalContainerViewModel> = (props) => {
+  const controller = new CreateChannelModalController()
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const data = new FormData(event.currentTarget);
+    controller.createKnowledgebase(new FormData(event.currentTarget))
   };
 
   return <CreateChannelModalView

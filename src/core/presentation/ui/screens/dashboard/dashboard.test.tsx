@@ -1,10 +1,37 @@
 import { render, screen } from '@testing-library/react';
-import DashboardView from './dashboard.view';
+import { DashboardContainer } from './dashboard.container';
 
-test('Renders the join channel and the create channel menus', () => {
-  render(<DashboardView/>);
-  const joinChannel = screen.getByText("Join Channel");
-  expect(joinChannel).toBeInTheDocument();
-  const createChannel = screen.getByText("Create Channel");
-  expect(createChannel).toBeInTheDocument();
-});	
+/**
+ * Given: Dashboard Container
+ * Expect: Needed elements are shown
+ */
+describe('Test dashboard container', () => {
+
+   test('renders create channel component', () => {
+      // Arrange
+      // Render Dashboard Container
+      render(<DashboardContainer />)
+
+      // Act
+      // Check if the Create Channel element is rendered
+      const createChannelElement = screen.getByText("Create Channel");
+
+      // Assert
+      // Assert that the element that we are looking for exists
+      expect(createChannelElement).toBeInTheDocument();
+   });
+
+   test('renders join channel component', () => {
+      // Arrange
+      // Render Dashboard Container
+      render(<DashboardContainer />)
+
+      // Act
+      // Check if the Join Channel element is rendered
+      const joinChannelElement = screen.getByText("Join Channel");
+
+      // Assert
+      // Assert that the element that we are looking for exists
+      expect(joinChannelElement).toBeInTheDocument();
+   });
+})
