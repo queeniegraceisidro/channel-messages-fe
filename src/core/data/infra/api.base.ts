@@ -2,6 +2,7 @@ import { ApiResponse, ApisauceInstance, create } from 'apisauce'
 import { ApiConfig, API_CONFIG } from './api.config'
 import { getGeneralApiProblem } from './api.problem'
 import { IErrorResponseModel } from '../gateways/api/api.types'
+import { API_WITH_CREDENTIALS } from '../../../config'
 
 interface IApi {
   apiSauce: ApisauceInstance
@@ -26,7 +27,8 @@ export class Api implements IApi {
       baseURL: this.config.url,
       headers: {
         Accept: 'application/json'
-      }
+      },
+      withCredentials: API_WITH_CREDENTIALS
     })
   }
 
