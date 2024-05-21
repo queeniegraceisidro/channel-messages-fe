@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom'
 import { DashboardContainer } from './screens/dashboard/dashboard.container'
 import { LoginContainer } from './screens/login/login.container'
+import { SignupContainer } from './screens/signup/signup.container'
 
 export const Navigator = () => {
   return (
@@ -12,6 +13,7 @@ export const Navigator = () => {
       <Routes>
         <Route path='/' element={<DashboardContainer />} />
         <Route path='/login' element={<LoginContainer />} />
+        <Route path='/signup' element={<SignupContainer />} />
       </Routes>
     </BrowserRouter>
   )
