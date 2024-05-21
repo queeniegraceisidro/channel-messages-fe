@@ -14,3 +14,8 @@ export interface IFormSignUpError {
   password1?: string[]
   password2?: string[]
 }
+
+export interface IFormLogin {
+  username: string
+  password: string
+}
