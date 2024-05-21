@@ -3,12 +3,16 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '
 import joinChannelImage from '../../../media/join-channel.jpg'
 import createChannelImage from '../../../media/create-channel.jpg'
 import { CreateChannelModal } from '../../components/dashboard/create-channel-modal/create-modal.container';
+import { JoinChannelModal } from '../../components/dashboard/join-channel-modal/join-modal.container';
 
 export interface IDashboardViewModel {
   children?: React.ReactNode
   showModal: boolean
+  showJoinChannelModel: boolean
   handleCreateModalShow: () => void
   handleCreateModalClose: () => void
+  handleJoinModalShow: () => void
+  handleJoinModalClose: () => void
 }
 
 const DashboardView: React.FC<IDashboardViewModel> = (props) => {
@@ -16,22 +20,21 @@ const DashboardView: React.FC<IDashboardViewModel> = (props) => {
     <BaseLayoutContainer>
       <Grid container spacing={4} sx={{ display: 'flex', flexDirection: 'row', justifyContent: "center" }}>
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column' }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="200"
-                image={joinChannelImage}
-                alt="Join Channel"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Join Channel
-                </Typography>
-                <Typography gutterBottom variant="body2" color="text.secondary">
-                  Join an existing channel by proving an invite code of the channel that you want to join                </Typography>
-              </CardContent>
-            </CardActionArea>
+          <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column' }} onClick={props.handleJoinModalShow}>            <CardActionArea>
+            <CardMedia
+              component="img"
+              height="200"
+              image={joinChannelImage}
+              alt="Join Channel"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Join Channel
+              </Typography>
+              <Typography gutterBottom variant="body2" color="text.secondary">
+                Join an existing channel by proving an invite code of the channel that you want to join                </Typography>
+            </CardContent>
+          </CardActionArea>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
@@ -56,6 +59,7 @@ const DashboardView: React.FC<IDashboardViewModel> = (props) => {
         </Grid>
       </Grid>
       <CreateChannelModal show={props.showModal} handleClose={props.handleCreateModalClose} />
+      <JoinChannelModal show={props.showJoinChannelModel} handleClose={props.handleJoinModalClose} />
     </BaseLayoutContainer >
   )
 }
