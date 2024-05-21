@@ -1,22 +1,43 @@
 import { useFormik } from 'formik';
 import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, ThemeProvider, Typography } from '@mui/material';
 import { defaultTheme } from '../../components/common/theme/app-theme.styles';
+import { IFormSignUp } from '../../../../domain/entities/formModels/signup-form.entity';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { FormRequestError } from '../../../../domain/entities/formModels/errors.entity';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 export interface ISignupViewModel {
    children: React.ReactNode
+   handleSubmit: (values: IFormSignUp) => void
 }
 
 const SignupView: React.FC<ISignupViewModel> = (props) => {
+   const navigate = useNavigate();
+
    const formik = useFormik({
       initialValues: {
          firstName: '',
          lastName: '',
          username: '',
-         password: ''
+         password1: '',
+         password2: ''
       },
-      onSubmit: (values) => {},
+      onSubmit: async (values) => {
+         try {
+            await props.handleSubmit(values)
+            toast.success('Successfully Registered!')
+            navigate('/login');
+            
+         } catch (error) {
+            if (error instanceof FormRequestError) {
+               formik.setErrors(error.data);
+            } else {
+               throw Error("Uncaught exception while creating user")
+            }
+         }
+      },
    });
 
    return (
@@ -52,8 +73,7 @@ const SignupView: React.FC<ISignupViewModel> = (props) => {
                <Typography component="h1" variant="h4">
                   Signup
                </Typography>
-
-               <form onSubmit={formik.handleSubmit} style={{ marginTop: '15px' }}>
+               <form onSubmit={formik.handleSubmit} style={{ marginTop: '10px' }}>
                   <Grid container spacing={2}>
                      <Grid item xs={12} sm={6}>
                         <TextField
@@ -105,16 +125,32 @@ const SignupView: React.FC<ISignupViewModel> = (props) => {
                         <TextField
                            required
                            fullWidth
-                           name="password"
+                           name="password1"
                            label="Password"
                            type="password"
-                           id="password"
+                           id="password1"
                            autoComplete="new-password"
-                           value={formik.values.password}
+                           value={formik.values.password1}
                            onChange={formik.handleChange}
                            onBlur={formik.handleBlur}
-                           error={formik.touched.password && Boolean(formik.errors.password)}
-                           helperText={formik.touched.password && formik.errors.password}
+                           error={formik.touched.password1 && Boolean(formik.errors.password1)}
+                           helperText={formik.touched.password1 && formik.errors.password1}
+                        />
+                     </Grid>
+                     <Grid item xs={12}>
+                        <TextField
+                           required
+                           fullWidth
+                           name="password2"
+                           label="Confirm Password"
+                           type="password"
+                           id="password2"
+                           autoComplete="new-password"
+                           value={formik.values.password2}
+                           onChange={formik.handleChange}
+                           onBlur={formik.handleBlur}
+                           error={formik.touched.password2 && Boolean(formik.errors.password2)}
+                           helperText={formik.touched.password2 && formik.errors.password2}
                         />
                      </Grid>
                   </Grid>
