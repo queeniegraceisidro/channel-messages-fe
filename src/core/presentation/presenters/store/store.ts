@@ -3,9 +3,11 @@ import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/t
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import channelsReducer from './reducers/channels.reducer';
+import authReducer from './reducers/auth.reducer';
 
 const reducer = combineReducers({
   channelState: channelsReducer,
+  authState: authReducer,
 });
 
 const persistConfig = {
