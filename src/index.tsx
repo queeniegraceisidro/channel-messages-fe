@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 import './index.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 let persistor = persistStore(store)
 
