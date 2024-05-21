@@ -26,11 +26,25 @@ export interface IPagedAPIViewModel<T> {
 export interface IErrorResponseModel {
   detail?: string
   error?: string
+  data?: any
 }
 
 export interface IChannelModel extends IBaseAPIModel {
-	name: string
-	created_at: string
-	updated_at?: string
-	deleted_at?: string
+  name: string
+  created_at: string
+  updated_at?: string
+  deleted_at?: string
+}
+
+export interface IUserModel extends IBaseAPIModel {
+  name: string
+  username: string
+  first_name: string
+  last_name: string
+}
+
+export interface IUserWithAccessTokenModel extends IBaseAPIModel {
+  access: string
+  refresh: string
+  user: IUserModel
 }
