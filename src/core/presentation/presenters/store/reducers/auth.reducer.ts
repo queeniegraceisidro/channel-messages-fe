@@ -1,10 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IUser } from "../../../../domain/entities/user/user.entity";
-
-
-interface IAuthState {
-  user: IUser | null
-}
+import { IAuthState } from "../../../../domain/entities/auth/auth.entity";
 
 const initialState: IAuthState = {
   user: null
