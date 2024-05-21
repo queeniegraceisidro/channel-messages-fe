@@ -2,19 +2,40 @@ import { Avatar, Box, Button, Container, CssBaseline, Grid, Link, TextField, The
 import { defaultTheme } from '../../components/common/theme/app-theme.styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useFormik } from 'formik';
-
+import { IFormLogin } from '../../../../domain/entities/formModels/signup-form.entity';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { FormRequestError } from '../../../../domain/entities/formModels/errors.entity';
 
 export interface ILoginViewModel {
    children: React.ReactNode
+   handleSubmit: (values: IFormLogin) => void
 }
 
 const LoginView: React.FC<ILoginViewModel> = (props) => {
+   const navigate = useNavigate();
+
    const formik = useFormik({
       initialValues: {
          username: '',
          password: ''
       },
-      onSubmit: async (values) => {},
+      onSubmit: async (values) => {
+         try {
+            await props.handleSubmit(values)
+            toast.success('Successfully Login!')
+            navigate('/dashboard');
+         } catch (error) {
+            if (error instanceof FormRequestError) {
+               formik.setErrors(error.data);
+               if ('nonFieldErrors' in error.data) {
+                  toast.error('Unable to log in with provided credentials.')
+               }
+            } else {
+               throw Error("Uncaught exception while creating user")
+            }
+         }
+      },
    });
 
    return (
