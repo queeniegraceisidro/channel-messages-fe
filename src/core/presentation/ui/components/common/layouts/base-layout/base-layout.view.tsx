@@ -1,28 +1,19 @@
 import * as React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import { NavbarContainer } from '../../navbar/navbar.container';
 import { SidebarContainer } from '../../sidebar/sidebar.container';
+import { defaultTheme } from '../../theme/app-theme.styles';
+
 
 export interface IBaseLayoutViewModel {
   children: React.ReactNode
   onToggleSidebar: () => void
   sidebarOpen: boolean
 }
-
-const defaultTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#30D5C8',
-    },
-    secondary: {
-      main: '#edf2ff',
-    },
-  },
-});
 
 
 const BaseLayoutView: React.FC<IBaseLayoutViewModel> = (props) => {
