@@ -4,13 +4,13 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export interface INavbarViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
+  handleLogout: () => void
 }
 
 const drawerWidth: number = 240;
@@ -38,12 +38,11 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export const NavbarView: React.FC<INavbarViewModel> = (props) => {
-
   return (
     <AppBar position="absolute" open={props.sidebarOpen}>
       <Toolbar
         sx={{
-          pr: '24px', // keep right padding when drawer closed
+          pr: '24px',
         }}
       >
         <IconButton
@@ -67,10 +66,8 @@ export const NavbarView: React.FC<INavbarViewModel> = (props) => {
         >
           Dashboard
         </Typography>
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
+        <IconButton color="inherit" onClick={props.handleLogout}>
+          <LogoutIcon />
         </IconButton>
       </Toolbar>
     </AppBar>
