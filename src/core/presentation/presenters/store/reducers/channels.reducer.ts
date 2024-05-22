@@ -1,14 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IChannel } from "../../../../domain/entities/channel/channel.entity";
+import { IMessage } from "../../../../domain/entities/message/message.entity";
+import { IPagedMessageEntity } from "../../../../domain/entities/message/channel-messages.entity";
 
 interface IChannelState {
   channels: IChannel[],
   currentChannel: IChannel | undefined
+  messages: IMessage[]
 }
 
 const initialState: IChannelState = {
   channels: [],
-  currentChannel: undefined
+  currentChannel: undefined,
+  messages: []
 }
 
 export const channelSlice = createSlice({
@@ -27,6 +31,9 @@ export const channelSlice = createSlice({
     },
     clearCurrentChannel(state) {
       state.currentChannel = undefined;
+    },
+    setChannelMessages(state, action: PayloadAction<IPagedMessageEntity>) {
+      state.messages = action.payload.results
     }
   },
 })
@@ -36,6 +43,7 @@ export const {
   addNewChannel,
   initializeUserChannels,
   setCurrentChannel,
-  clearCurrentChannel
+  clearCurrentChannel,
+  setChannelMessages
 } = channelSlice.actions
 export default channelSlice.reducer
