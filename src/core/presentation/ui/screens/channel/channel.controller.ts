@@ -31,9 +31,9 @@ export default class ChannelController {
     return foundChannel || null;
   }
 
-  async retrieveChannelMessages(channelId: number | undefined) {
+  async retrieveChannelMessages(channelId: number | undefined, cursor: string | null = null) {
     if (channelId) {
-      await this.retrieveChannelMessagesUseCase.execute(channelId)
+      await this.retrieveChannelMessagesUseCase.execute(channelId, cursor)
     }
   }
 
