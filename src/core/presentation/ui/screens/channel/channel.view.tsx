@@ -3,48 +3,58 @@ import { BaseLayoutContainer } from '../../components/common/layouts/base-layout
 import { Avatar, Divider, Fab, Grid, List, ListItem, Paper, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { IChannel } from '../../../../domain/entities/channel/channel.entity';
+import { IMessage } from '../../../../domain/entities/message/message.entity';
+import { store } from '../../../presenters/store/store';
+import { WEBSOCKET_URL } from '../../../../../config';
+import { WEBSOCKET_CHANNEL_DETAIL_URL } from '../../../../data/gateways/api/constants';
+import { addChannelMessage } from '../../../presenters/store/reducers/channels.reducer';
+import { mapMessageAttributes } from '../../../../data/gateways/api/services/mappers/messages.mappers';
 
 
 export interface IChannelViewModel {
   children: React.ReactNode
   channel: IChannel | undefined
+  messages: IMessage[]
+  isLoading: boolean
+  handleSendMessage: (message: string) => void
+  handleLoadMessage: () => void
 }
-
-interface Message {
-  id: number;
-  content: string;
-  sender: string;
-}
-
 
 const ChannelView: React.FC<IChannelViewModel> = (props) => {
+  const currentUser = store.getState().authState.user
   const [newMessage, setNewMessage] = useState<string>('');
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  // Sample messages for UI testing
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      content: 'Hello, how are you?',
-      sender: 'John',
-    },
-    {
-      id: 2,
-      content: 'Hi John! I\'m doing well, thank you.',
-      sender: 'Alice',
-    },
-    {
-      id: 3,
-      content: 'Great to hear! Let me know if you need anything.',
-      sender: 'John',
-    },
-  ]);
+  const messagesStartRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const SOCKET_URL = `${WEBSOCKET_URL}${WEBSOCKET_CHANNEL_DETAIL_URL(props.channel!.id)}`
+    const socket = new WebSocket(SOCKET_URL);
+
+    socket.onopen = () => {
+      console.log("WebSocket connection established.");
+    };
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data).message
+      const parsedMessage: IMessage = mapMessageAttributes(message)
+      store.dispatch(addChannelMessage(parsedMessage))
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket connection closed.");
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [props.channel]);
 
   useEffect(() => {
     // Scroll to the bottom when messages change
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (messagesStartRef.current) {
+      messagesStartRef.current.scrollIntoView();
     }
-  }, [messages]);
+  }, [props.messages]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -55,16 +65,18 @@ const ChannelView: React.FC<IChannelViewModel> = (props) => {
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return; // Avoid sending empty messages
+    props.handleSendMessage(newMessage)
+    setNewMessage('')
+  };
 
-    setMessages(prevMessages => [
-      ...prevMessages,
-      {
-        id: prevMessages.length + 1,
-        content: newMessage,
-        sender: 'You', // Assuming the user is the sender
-      },
-    ]);
-    setNewMessage('');
+  const handleScroll = () => {
+    if (containerRef.current) {
+      const { scrollTop, clientHeight, scrollHeight } = containerRef.current;
+      if (scrollTop === 0 && !props.isLoading) {
+        // Load more messages when scrolled to the top
+        props.handleLoadMessage();
+      }
+    }
   };
 
   return (
@@ -80,29 +92,30 @@ const ChannelView: React.FC<IChannelViewModel> = (props) => {
               sx={{ width: '100%', flexGrow: 1, overflow: 'hidden' }}
             >
               <Grid xs={12} sx={{ width: '100%' }}>
-                <Paper style={{ height: '68vh', overflowY: 'auto' }}>
-                  <List>
-                    {messages.map((message) => (
+                <Paper ref={containerRef} onScroll={handleScroll} style={{ height: '75vh', overflowY: 'auto' }}>
+                  <List style={{ display: 'flex', flexDirection: 'column-reverse' }}>
+                    <div ref={messagesStartRef} />
+                    {props.messages.map((message) => (
                       <ListItem
                         key={message.id}
                         style={{
-                          flexDirection: message.sender === 'You' ? 'row-reverse' : 'row',
+                          flexDirection: message.sender.id === currentUser!.id ? 'row-reverse' : 'row',
                           marginBottom: '5px',
                           padding: '8px',
                         }}
                       >
                         <div>
-                          {message.sender !== 'You' && (
+                          {message.sender.id !== currentUser!.id && (
                             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                              <Avatar>{message.sender.charAt(0)}</Avatar>
-                              <div style={{ marginLeft: '10px', color: message.sender === 'You' ? '#35bdb1' : '#000' }}>
-                                {message.sender}
+                              <Avatar>{message.sender.firstName.charAt(0)}</Avatar>
+                              <div style={{ marginLeft: '10px', color: message.sender.id === currentUser!.id ? '#35bdb1' : '#000' }}>
+                                {message.sender.firstName} {message.sender.lastName}
                               </div>
                             </div>
                           )}
                           <div
                             style={{
-                              backgroundColor: message.sender === 'You' ? '#35bdb1' : '#f0f0f0',
+                              backgroundColor: message.sender.id === currentUser!.id ? '#35bdb1' : '#f0f0f0',
                               borderRadius: '15px',
                               padding: '10px',
                               display: 'flex',
@@ -112,12 +125,11 @@ const ChannelView: React.FC<IChannelViewModel> = (props) => {
                               overflowWrap: 'break-word',
                             }}
                           >
-                            <div style={{ color: message.sender === 'You' ? '#fff' : '#000' }}>{message.content}</div>
+                            <div style={{ color: message.sender.id === currentUser!.id ? '#fff' : '#000' }}>{message.message}</div>
                           </div>
                         </div>
                       </ListItem>
                     ))}
-                    <div ref={messagesEndRef} />
                   </List>
                 </Paper>
                 <Divider />

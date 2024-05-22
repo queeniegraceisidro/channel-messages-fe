@@ -33,3 +33,8 @@ export interface IFormChannelError {
   channelName?: string[]
   inviteCode?: string[]
 }
+
+export interface IFormCreateMessage {
+  channel: number
+  message: string
+}
