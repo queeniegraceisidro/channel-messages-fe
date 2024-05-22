@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter'
-import { CHANNEL_JOIN_URL, CHANNEL_URL, LOGIN_URL, LOGOUT_URL, REGISTER_URL, USER_CHANNEL_URL } from '../gateways/api/constants'
+import { CHANNEL_JOIN_URL, CHANNEL_URL, LOGIN_URL, LOGOUT_URL, MESSAGE_CREATE_URL, REGISTER_URL, USER_CHANNEL_URL } from '../gateways/api/constants'
 import { IChannelModel } from '../gateways/api/api.types'
 import { IFormLogin, IFormSignUp } from '../../domain/entities/formModels/signup-form.entity'
 
@@ -20,6 +20,8 @@ export const mockAPIResponses = (
     mock.onGet(USER_CHANNEL_URL).reply(400, getUserChannelsErrorResponse())
     // Retrieve Channel Messages
     mock.onGet(`${CHANNEL_URL}${pk}/messages/`).reply(400, getRetrieveChannelMessagesErrorResponse())
+    // Create Channel Messages
+    mock.onPost(MESSAGE_CREATE_URL).reply(400, getCreateChannelMessagesErrorResponse())
   } else {
     // Channel
     mock.onPost(CHANNEL_URL).reply(201, formatChannelCreateIntoResponse(baseDataRes))
@@ -35,6 +37,8 @@ export const mockAPIResponses = (
     mock.onPost(LOGOUT_URL).reply(200, formatUserLogoutIntoResponse())
     // Retrieve Channel Messages
     mock.onGet(`${CHANNEL_URL}${pk}/messages/`).reply(200, formatRetrieveChannelMessagesIntoResponse(pk))
+    // Create Channel Messages
+    mock.onPost(MESSAGE_CREATE_URL).reply(201, formatCreateChannelMessagesIntoResponse(baseDataRes))
   }
 }
 
@@ -281,5 +285,27 @@ const formatRetrieveChannelMessagesIntoResponse = (pk: number | null) => {
         }
       ]
     }
+  }
+}
+
+/** Create Channel Messages */
+const getCreateChannelMessagesErrorResponse = () => {
+  return {
+    "detail": "Authentication credentials were not provided."
+  }
+}
+
+const formatCreateChannelMessagesIntoResponse = (data: { message: string, channel: number }) => {
+  return {
+    "id": 1,
+    "channel": 1,
+    "sender": {
+      "id": 1,
+      "first_name": "John",
+      "last_name": "Doe",
+      "username": "johndoe"
+    },
+    "message": data.message,
+    "created_at": "2024-05-04 03:52 PM"
   }
 }
