@@ -31,4 +31,5 @@ export interface IFormJoinChannel {
 export interface IFormChannelError {
   nonFieldErrors?: string[]
   channelName?: string[]
+  inviteCode?: string[]
 }

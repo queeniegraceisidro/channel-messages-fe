@@ -69,6 +69,7 @@ const formatChannelCreateIntoResponse = (data: IChannelModel) => {
   return {
     "id": 2,
     "name": data,
+    "invite_code": "12345678",
     "created_at": "2024-01-24",
     "updated_at": null,
     "delted_at": null

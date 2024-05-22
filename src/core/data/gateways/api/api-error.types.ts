@@ -3,18 +3,19 @@
  */
 
 export interface IBaseAPIErrorModel {
-	non_field_errors?: string[];
+  non_field_errors?: string[];
 }
 
 export interface IUserLoginErrorModel extends IBaseAPIErrorModel {
-	username?: string[];
-	first_name?: string[];
-	last_name?: string[];
-	password_1?: string[];
-	password_2?: string[];
+  username?: string[];
+  first_name?: string[];
+  last_name?: string[];
+  password_1?: string[];
+  password_2?: string[];
 }
 
 
 export interface IChannelErrorModel extends IBaseAPIErrorModel {
-	name?: string[];
+  name?: string[];
+  invite_code?: string[];
 }
