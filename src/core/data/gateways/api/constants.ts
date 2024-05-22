@@ -1,10 +1,14 @@
 /**
  * CHANNEL URLS
  */
-
-// Create channel
 export const CHANNEL_URL = `/messenger/channel/`
 export const CHANNEL_JOIN_URL = `/messenger/channel/join/`
+
+/**
+ * MESSAGES URLS
+ */
+export const MESSAGE_CREATE_URL = `/messenger/messages/`
+export const MESSAGE_DETAIL_URL = (id: number) => `${CHANNEL_URL}${id}/messages/`
 
 /**
  * USER CHANNEL URLS

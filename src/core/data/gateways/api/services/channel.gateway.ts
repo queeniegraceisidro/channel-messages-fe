@@ -4,7 +4,7 @@ import {
 import ChannelEntity, { IChannel, IChannelCreateForm } from '../../../../domain/entities/channel/channel.entity'
 import { Api } from '../../../infra/api.base'
 import { mapChannelAttributes, mapChannelErrorAttributes, mapUserChannelsAttributes } from './mappers/channel.mappers'
-import { CHANNEL_JOIN_URL, CHANNEL_URL, USER_CHANNEL_URL, } from '../constants'
+import { CHANNEL_JOIN_URL, CHANNEL_URL, MESSAGE_DETAIL_URL, USER_CHANNEL_URL, } from '../constants'
 import PagedChannelEntity, { IPagedChannelEntity } from '../../../../domain/entities/channel/user-channels.entity'
 import { BadRequest } from '../../../infra/api.error'
 import { FormRequestError } from '../../../../domain/entities/formModels/errors.entity'
@@ -89,7 +89,7 @@ export default class ChannelApiGateway extends Api {
   }
 
   private async _getChannelMessages(id: number): Promise<IPagedAPIViewModel<IMessageModel>> {
-    return await this.get(`${CHANNEL_URL}${id}/messages/`)
+    return await this.get(MESSAGE_DETAIL_URL(id))
   }
 
   private _mapChannelMessagesFromResponse(response: IPagedAPIViewModel<IMessageModel>): IPagedMessageEntity {
