@@ -8,7 +8,18 @@ export interface IPagedMessageEntity {
   previous: string | null
   totalPages: number
   count: number,
-  currentPageNumber: number
+  currentPageNumber: number,
+}
+
+export interface IPagedMessageEntityWithCursors {
+   results: IMessage[]
+   next: string | null
+   previous: string | null
+   totalPages: number
+   count: number,
+   currentPageNumber: number,
+   nextCursor: string | null,
+   previousCursor: string | null
 }
 
 export default class PagedMessageEntity extends PagedListEntity<IMessage> {
