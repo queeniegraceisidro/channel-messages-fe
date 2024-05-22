@@ -11,6 +11,7 @@ export interface INavbarViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
   handleLogout: () => void
+  currentPage: string
 }
 
 const drawerWidth: number = 240;
@@ -64,7 +65,7 @@ export const NavbarView: React.FC<INavbarViewModel> = (props) => {
           noWrap
           sx={{ flexGrow: 1 }}
         >
-          Dashboard
+          {props.currentPage}
         </Typography>
         <IconButton color="inherit" onClick={props.handleLogout}>
           <LogoutIcon />

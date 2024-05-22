@@ -24,7 +24,7 @@ export const SidebarContainer: React.FC<ISidebarContainerViewModel> = (props) =>
   }
 
   const handleRedirectToChannel = (channel: IChannel) => {
-    const channelUrl = `/channel/${channel.name}`;
+    const channelUrl = `/channel/${channel.id}`;
     store.dispatch(setCurrentChannel(channel.id))
     navigate(channelUrl);
   }
