@@ -73,7 +73,7 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
         <ListItemButton
           key={'dashboard'}
           sx={{
-            backgroundColor: props.currentPage === 'dashboard' ? '#21958c33' : 'inherit',
+            backgroundColor: props.currentPage === 'Dashboard' ? '#21958c33' : 'inherit'
           }}
           onClick={props.handleRedirectToDashboard}
         >
