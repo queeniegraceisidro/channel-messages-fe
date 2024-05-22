@@ -39,7 +39,8 @@ describe('Test retrieve channel messages use case', () => {
   test('execute', async () => {
     // Arrange
     // Initialize the current channel
-    const channelId = 6
+    const channelId = 1
+    const nextMessageCursor = 'cD0yMDI0LTA1LTA0KzA4JTNBMDMlM0EzNy4wNjk4NzUlMkIwMCUzQTAw'
     // Mock a request to the api with a success response
     mockAPIResponses(gateway.apiSauce.axiosInstance, false, {}, channelId)
 
@@ -51,11 +52,13 @@ describe('Test retrieve channel messages use case', () => {
     expect(state.channelState.messages.length).toBe(0)
 
     // Act
-    await useCase.execute(channelId)
+    await useCase.execute(channelId, null)
     state = store.getState()
 
     // Assert
     // Assert that our state contains channel messages
     expect(state.channelState.messages.length).toBeGreaterThan(0)
+    // Assert that our state contains a next message cursor
+    expect(state.channelState.nextMessageCursor).toBe(nextMessageCursor)
   })
 })

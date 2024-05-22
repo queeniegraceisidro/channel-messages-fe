@@ -22,6 +22,7 @@ export const mockAPIResponses = (
     mock.onGet(`${CHANNEL_URL}${pk}/messages/`).reply(400, getRetrieveChannelMessagesErrorResponse())
     // Create Channel Messages
     mock.onPost(MESSAGE_CREATE_URL).reply(400, getCreateChannelMessagesErrorResponse())
+
   } else {
     // Channel
     mock.onPost(CHANNEL_URL).reply(201, formatChannelCreateIntoResponse(baseDataRes))
@@ -185,103 +186,250 @@ const getRetrieveChannelMessagesErrorResponse = () => {
 }
 
 const formatRetrieveChannelMessagesIntoResponse = (pk: number | null) => {
-  if (pk == 6) {
+  if (pk == 1) {
     return {
-      "count": 8,
-      "next": "http://127.0.0.1:8000/api/messenger/channel/6/messages/?page=2",
+      "next": "http://127.0.0.1:8000/api/messenger/channel/1/messages/?cursor=cD0yMDI0LTA1LTA0KzA4JTNBMDMlM0EzNy4wNjk4NzUlMkIwMCUzQTAw",
       "previous": null,
       "results": [
         {
-          "id": 8,
-          "channel": 6,
+          "id": 95,
+          "channel": 1,
           "sender": {
             "id": 1,
             "first_name": "John",
             "last_name": "Doe",
             "username": "johndoe"
           },
-          "message": "bbb",
-          "created_at": "2024-04-13 11:22 PM"
+          "message": "a60",
+          "created_at": "2024-05-04 05:03 PM"
         },
         {
-          "id": 7,
-          "channel": 6,
+          "id": 94,
+          "channel": 1,
           "sender": {
             "id": 1,
             "first_name": "John",
             "last_name": "Doe",
             "username": "johndoe"
           },
-          "message": "aaaaa",
-          "created_at": "2024-04-13 11:20 PM"
+          "message": "a59",
+          "created_at": "2024-05-04 05:03 PM"
         },
         {
-          "id": 6,
-          "channel": 6,
+          "id": 93,
+          "channel": 1,
           "sender": {
             "id": 1,
             "first_name": "John",
             "last_name": "Doe",
             "username": "johndoe"
           },
-          "message": "Hi everyone! Thanks for inviting me to this sample channel.",
-          "created_at": "2024-04-13 11:20 PM"
-        }
-      ]
-    }
-  } else if (pk == 7) {
-    return {
-      "count": 4,
-      "next": null,
-      "previous": null,
-      "results": [
-        {
-          "id": 4,
-          "channel": 7,
-          "sender": {
-            "id": 1,
-            "first_name": "John",
-            "last_name": "Doe",
-            "username": "johndoe"
-          },
-          "message": "bbb",
-          "created_at": "2024-04-13 11:22 PM"
+          "message": "a58",
+          "created_at": "2024-05-04 05:03 PM"
         },
         {
-          "id": 3,
-          "channel": 7,
+          "id": 92,
+          "channel": 1,
           "sender": {
             "id": 1,
             "first_name": "John",
             "last_name": "Doe",
             "username": "johndoe"
           },
-          "message": "aaaaa",
-          "created_at": "2024-04-13 11:20 PM"
+          "message": "a57",
+          "created_at": "2024-05-04 05:03 PM"
         },
         {
-          "id": 2,
-          "channel": 7,
+          "id": 91,
+          "channel": 1,
           "sender": {
             "id": 1,
             "first_name": "John",
             "last_name": "Doe",
             "username": "johndoe"
           },
-          "message": "Hi everyone! Thanks for inviting me to this sample channel.",
-          "created_at": "2024-04-13 11:20 PM"
+          "message": "a56",
+          "created_at": "2024-05-04 05:03 PM"
         },
         {
-          "id": 1,
-          "channel": 7,
+          "id": 90,
+          "channel": 1,
           "sender": {
             "id": 1,
             "first_name": "John",
             "last_name": "Doe",
             "username": "johndoe"
           },
-          "message": "Hi everyone! Thanks for inviting me to this sample channel.",
-          "created_at": "2024-04-13 11:20 PM"
+          "message": "a55",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 89,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a54",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 88,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a53",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 87,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a52",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 86,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a51",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 85,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a50",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 84,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a49",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 83,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a48",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 82,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a47",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 81,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a46",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 80,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a45",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 79,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a44",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 78,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a43",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 77,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a42",
+          "created_at": "2024-05-04 05:03 PM"
+        },
+        {
+          "id": 76,
+          "channel": 1,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "a41",
+          "created_at": "2024-05-04 05:03 PM"
         }
       ]
     }
