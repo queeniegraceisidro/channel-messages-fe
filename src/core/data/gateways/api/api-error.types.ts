@@ -13,3 +13,8 @@ export interface IUserLoginErrorModel extends IBaseAPIErrorModel {
 	password_1?: string[];
 	password_2?: string[];
 }
+
+
+export interface IChannelErrorModel extends IBaseAPIErrorModel {
+	name?: string[];
+}

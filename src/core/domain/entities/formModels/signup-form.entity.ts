@@ -19,3 +19,12 @@ export interface IFormLogin {
   username: string
   password: string
 }
+
+export interface IFormChannel {
+  channelName: string
+}
+
+export interface IFormChannelError {
+  nonFieldErrors?: string[]
+  channelName?: string[]
+}
