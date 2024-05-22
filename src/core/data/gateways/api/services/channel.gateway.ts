@@ -14,6 +14,7 @@ import PagedMessageEntity, { IPagedMessageEntity } from '../../../../domain/enti
 import { mapChannelMessagesAttributes, mapMessageAttributes } from './mappers/messages.mappers'
 import { IMessage } from '../../../../domain/entities/message/message.entity'
 
+
 export default class ChannelApiGateway extends Api {
 
   async createChannel(channelName: string): Promise<IChannel> {
@@ -80,17 +81,21 @@ export default class ChannelApiGateway extends Api {
     return await this.post<IChannelModel>(CHANNEL_JOIN_URL, inviteCodeParams)
   }
 
-  async getChannelMessages(id: number): Promise<IPagedMessageEntity> {
+  async getChannelMessages(id: number, cursor: string | null): Promise<IPagedMessageEntity> {
     try {
-      const response = await this._getChannelMessages(id)
+      const response = await this._getChannelMessages(id, cursor)
       return this._mapChannelMessagesFromResponse(response)
     } catch (error) {
       throw error
     }
   }
 
-  private async _getChannelMessages(id: number): Promise<IPagedAPIViewModel<IMessageModel>> {
-    return await this.get(MESSAGE_DETAIL_URL(id))
+
+  private async _getChannelMessages(id: number, cursor: string | null): Promise<IPagedAPIViewModel<IMessageModel>> {
+    return await this.get(
+      MESSAGE_DETAIL_URL(id),
+      { cursor: cursor }
+    )
   }
 
   private _mapChannelMessagesFromResponse(response: IPagedAPIViewModel<IMessageModel>): IPagedMessageEntity {
