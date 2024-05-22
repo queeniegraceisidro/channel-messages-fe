@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter'
-import { CHANNEL_URL, LOGIN_URL, REGISTER_URL } from '../gateways/api/constants'
+import { CHANNEL_URL, LOGIN_URL, LOGOUT_URL, REGISTER_URL } from '../gateways/api/constants'
 import { IChannelModel } from '../gateways/api/api.types'
 import { IFormLogin, IFormSignUp } from '../../domain/entities/formModels/signup-form.entity'
 
@@ -21,6 +21,15 @@ export const mockAPIResponses = (
       mock.onPost(REGISTER_URL).reply(201, formatUserCreateIntoResponse(baseDataRes))
       // Login
       mock.onPost(LOGIN_URL).reply(200, formatUserLoginIntoResponse(baseDataRes))
+      // Logout
+      mock.onPost(LOGOUT_URL).reply(200, formatUserLogoutIntoResponse())
+   }
+}
+
+/** Logout */
+const formatUserLogoutIntoResponse = () => {
+   return {
+      "detail": "Successfully logged out."
    }
 }
 
