@@ -4,7 +4,7 @@ import { IChannelModel } from '../gateways/api/api.types'
 import { IFormLogin, IFormSignUp } from '../../domain/entities/formModels/signup-form.entity'
 
 export const mockAPIResponses = (
-  axiosInstance: any, testError: boolean = false, baseDataRes: any = {}
+  axiosInstance: any, testError: boolean = false, baseDataRes: any = {}, pk: number | null = null
 ): void => {
   const mock = new MockAdapter(axiosInstance)
   if (testError) {
@@ -18,6 +18,8 @@ export const mockAPIResponses = (
     mock.onPost(LOGIN_URL).reply(400, getUserLoginErrorResponse(baseDataRes))
     // Retrieve User Channels
     mock.onGet(USER_CHANNEL_URL).reply(400, getUserChannelsErrorResponse())
+    // Retrieve Channel Messages
+    mock.onGet(`${CHANNEL_URL}${pk}/messages/`).reply(400, getRetrieveChannelMessagesErrorResponse())
   } else {
     // Channel
     mock.onPost(CHANNEL_URL).reply(201, formatChannelCreateIntoResponse(baseDataRes))
@@ -31,6 +33,8 @@ export const mockAPIResponses = (
     mock.onPost(LOGIN_URL).reply(200, formatUserLoginIntoResponse(baseDataRes))
     // Logout
     mock.onPost(LOGOUT_URL).reply(200, formatUserLogoutIntoResponse())
+    // Retrieve Channel Messages
+    mock.onGet(`${CHANNEL_URL}${pk}/messages/`).reply(200, formatRetrieveChannelMessagesIntoResponse(pk))
   }
 }
 
@@ -166,5 +170,116 @@ const formatChannelJoinIntoResponse = (data: { name: string, code: string }) => 
     "created_at": "2024-01-24",
     "updated_at": null,
     "delted_at": null
+  }
+}
+
+/** Retrieve Channel Messages */
+const getRetrieveChannelMessagesErrorResponse = () => {
+  return {
+    "detail": "Authentication credentials were not provided."
+  }
+}
+
+const formatRetrieveChannelMessagesIntoResponse = (pk: number | null) => {
+  if (pk == 6) {
+    return {
+      "count": 8,
+      "next": "http://127.0.0.1:8000/api/messenger/channel/6/messages/?page=2",
+      "previous": null,
+      "results": [
+        {
+          "id": 8,
+          "channel": 6,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "bbb",
+          "created_at": "2024-04-13 11:22 PM"
+        },
+        {
+          "id": 7,
+          "channel": 6,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "aaaaa",
+          "created_at": "2024-04-13 11:20 PM"
+        },
+        {
+          "id": 6,
+          "channel": 6,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "Hi everyone! Thanks for inviting me to this sample channel.",
+          "created_at": "2024-04-13 11:20 PM"
+        }
+      ]
+    }
+  } else if (pk == 7) {
+    return {
+      "count": 4,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "id": 4,
+          "channel": 7,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "bbb",
+          "created_at": "2024-04-13 11:22 PM"
+        },
+        {
+          "id": 3,
+          "channel": 7,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "aaaaa",
+          "created_at": "2024-04-13 11:20 PM"
+        },
+        {
+          "id": 2,
+          "channel": 7,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "Hi everyone! Thanks for inviting me to this sample channel.",
+          "created_at": "2024-04-13 11:20 PM"
+        },
+        {
+          "id": 1,
+          "channel": 7,
+          "sender": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johndoe"
+          },
+          "message": "Hi everyone! Thanks for inviting me to this sample channel.",
+          "created_at": "2024-04-13 11:20 PM"
+        }
+      ]
+    }
   }
 }
