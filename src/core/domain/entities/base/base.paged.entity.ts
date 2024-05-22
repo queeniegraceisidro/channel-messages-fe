@@ -1,6 +1,6 @@
 export interface IBasePagedListEntity {
-  next: string
-  previous: string
+  next: string | null
+  previous: string | null
   count: number
   currentPageNumber: number
   totalPages: number
@@ -21,8 +21,8 @@ export default class PagedListEntity<T> {
 
   constructor(model: IBasePagedListEntity | IPagedListEntity | null) {
     if (model !== null) {
-      this.next = model.next
-      this.previous = model.previous
+      this.next = model.next ?? ''
+      this.previous = model.previous ?? ''
       this.totalPages = model.totalPages
       this.currentPageNumber = model.currentPageNumber
       this.count = model.count
