@@ -26,3 +26,4 @@ export const REGISTER_URL = `/users/auth/register`
  * WEBSOCKET URLS
  */
 export const WEBSOCKET_CHANNEL_URL = `/channel/`
+export const WEBSOCKET_CHANNEL_DETAIL_URL = (channelId: number) => `${WEBSOCKET_CHANNEL_URL}${channelId}/`
