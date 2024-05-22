@@ -1,5 +1,5 @@
 import {
-  IChannelModel, IPagedAPIViewModel, IUserChannelModel,
+  IChannelModel, IMessageModel, IPagedAPIViewModel, IUserChannelModel,
 } from '../api.types'
 import ChannelEntity, { IChannel, IChannelCreateForm } from '../../../../domain/entities/channel/channel.entity'
 import { Api } from '../../../infra/api.base'
@@ -10,6 +10,8 @@ import { BadRequest } from '../../../infra/api.error'
 import { FormRequestError } from '../../../../domain/entities/formModels/errors.entity'
 import { IChannelErrorModel } from '../api-error.types'
 import { IFormChannelError, IFormJoinChannel } from '../../../../domain/entities/formModels/signup-form.entity'
+import PagedMessageEntity, { IPagedMessageEntity } from '../../../../domain/entities/message/channel-messages.entity'
+import { mapChannelMessagesAttributes } from './mappers/messages.mappers'
 
 export default class ChannelApiGateway extends Api {
 
@@ -76,4 +78,23 @@ export default class ChannelApiGateway extends Api {
   private async _joinChannel(inviteCodeParams: IFormJoinChannel): Promise<IChannelModel> {
     return await this.post<IChannelModel>(CHANNEL_JOIN_URL, inviteCodeParams)
   }
+
+  async getChannelMessages(id: number): Promise<IPagedMessageEntity> {
+    try {
+      const response = await this._getChannelMessages(id)
+      return this._mapChannelMessagesFromResponse(response)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  private async _getChannelMessages(id: number): Promise<IPagedAPIViewModel<IMessageModel>> {
+    return await this.get(`${CHANNEL_URL}${id}/messages/`)
+  }
+
+  private _mapChannelMessagesFromResponse(response: IPagedAPIViewModel<IMessageModel>): IPagedMessageEntity {
+    const messages = new PagedMessageEntity(mapChannelMessagesAttributes(response))
+    return messages.getCurrentValuesAsJSON()
+  }
+
 }

@@ -51,9 +51,16 @@ export interface IUserWithAccessTokenModel extends IBaseAPIModel {
 }
 
 export interface ILogoutResponseModel {
-	detail: string
+  detail: string
 }
 
 export interface IUserChannelModel extends IBaseAPIModel {
-	channel: IChannelModel
+  channel: IChannelModel
+}
+
+export interface IMessageModel extends IBaseAPIModel {
+  channel: number
+  sender: IUserModel
+  message: string
+  created_at?: string
 }
