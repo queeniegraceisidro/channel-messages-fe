@@ -7,12 +7,14 @@ interface IChannelState {
   channels: IChannel[],
   currentChannel: IChannel | undefined
   messages: IMessage[]
+  hasNextMessagePage: boolean
 }
 
 const initialState: IChannelState = {
   channels: [],
   currentChannel: undefined,
-  messages: []
+  messages: [],
+  hasNextMessagePage: false
 }
 
 export const channelSlice = createSlice({
@@ -34,6 +36,15 @@ export const channelSlice = createSlice({
     },
     setChannelMessages(state, action: PayloadAction<IPagedMessageEntity>) {
       state.messages = action.payload.results
+      state.hasNextMessagePage = action.payload.next ? true : false
+    },
+    addChannelMessage(state, action: PayloadAction<IMessage>) {
+      const newMessage = action.payload
+      // Check if the pk already exists on the thread to avoid displaying duplicate messages
+      const messageExist = state.messages.some((message) => message.id === newMessage.id);
+      if (!messageExist) {
+        state.messages = [newMessage, ...state.messages]
+      }
     }
   },
 })
@@ -44,6 +55,7 @@ export const {
   initializeUserChannels,
   setCurrentChannel,
   clearCurrentChannel,
-  setChannelMessages
+  setChannelMessages,
+  addChannelMessage
 } = channelSlice.actions
 export default channelSlice.reducer
