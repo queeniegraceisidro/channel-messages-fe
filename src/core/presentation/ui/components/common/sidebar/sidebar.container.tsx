@@ -5,6 +5,7 @@ import { SidebarView } from './sidebar.view'
 export interface ISidebarContainerViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
+  currentPage: string
 }
 
 export const SidebarContainer: React.FC<ISidebarContainerViewModel> = (props) => {
@@ -13,5 +14,6 @@ export const SidebarContainer: React.FC<ISidebarContainerViewModel> = (props) =>
     onToggleSidebar={props.onToggleSidebar}
     sidebarOpen={props.sidebarOpen}
     channels={channels}
+    currentPage={props.currentPage}
   />
 }

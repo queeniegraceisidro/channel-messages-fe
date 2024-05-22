@@ -17,7 +17,7 @@ export interface IDashboardViewModel {
 
 const DashboardView: React.FC<IDashboardViewModel> = (props) => {
   return (
-    <BaseLayoutContainer>
+    <BaseLayoutContainer currentPage={'dashboard'}>
       <Grid container spacing={4} sx={{ display: 'flex', flexDirection: 'row', justifyContent: "center" }}>
         <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ maxWidth: 345, display: 'flex', flexDirection: 'column' }} onClick={props.handleJoinModalShow}>            <CardActionArea>

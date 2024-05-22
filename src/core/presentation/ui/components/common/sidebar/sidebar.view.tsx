@@ -19,6 +19,7 @@ export interface ISidebarViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
   channels: IChannel[]
+  currentPage: string
 }
 
 const drawerWidth: number = 240;
@@ -77,7 +78,7 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
         <ListItemButton
           key={'dashboard'}
           sx={{
-            backgroundColor: currentPage === 'dashboard' ? '#21958c33' : 'inherit',
+            backgroundColor: props.currentPage === 'dashboard' ? '#21958c33' : 'inherit',
           }}
           onClick={handleRedirectToDashboard}
         >
@@ -92,14 +93,12 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
         </ListSubheader>
         {
           props.channels.map((element) => {
-            return <span key={element.id}>
-              <ListItemButton>
-                <ListItemIcon>
-                  <QuestionAnswerIcon />
-                </ListItemIcon>
-                <ListItemText primary={element.name} />
-              </ListItemButton>
-            </span>
+            return <ListItemButton key={element.id}>
+              <ListItemIcon>
+                <QuestionAnswerIcon />
+              </ListItemIcon>
+              <ListItemText primary={element.name} />
+            </ListItemButton>
           })
         }
       </List>

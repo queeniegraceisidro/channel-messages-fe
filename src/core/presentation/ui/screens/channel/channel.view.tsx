@@ -67,7 +67,7 @@ const ChannelView: React.FC<IChannelViewModel> = (props) => {
   };
 
   return (
-    <BaseLayoutContainer>
+    <BaseLayoutContainer currentPage='channel'>
       <Grid
         container
         direction="row"
