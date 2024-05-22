@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
@@ -12,7 +11,6 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
-import { useNavigate } from 'react-router-dom';
 import { IChannel } from '../../../../../domain/entities/channel/channel.entity';
 
 export interface ISidebarViewModel {
@@ -20,6 +18,9 @@ export interface ISidebarViewModel {
   sidebarOpen: boolean
   channels: IChannel[]
   currentPage: string
+  handleRedirectToDashboard: () => void
+  handleRedirectToChannel: (element: IChannel) => void
+  currentChannelId: number | undefined
 }
 
 const drawerWidth: number = 240;
@@ -52,12 +53,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
-  const navigate = useNavigate();
-  const currentPage = 'dashboard'
-
-  const handleRedirectToDashboard = () => {
-    navigate('/dashboard');
-  }
 
   return (
     <Drawer variant="permanent" open={props.sidebarOpen}>
@@ -80,7 +75,7 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
           sx={{
             backgroundColor: props.currentPage === 'dashboard' ? '#21958c33' : 'inherit',
           }}
-          onClick={handleRedirectToDashboard}
+          onClick={props.handleRedirectToDashboard}
         >
           <ListItemIcon>
             <DashboardIcon />
@@ -93,7 +88,13 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
         </ListSubheader>
         {
           props.channels.map((element) => {
-            return <ListItemButton key={element.id}>
+            return <ListItemButton
+              key={element.id}
+              sx={{
+                backgroundColor: props.currentChannelId === element.id ? '#21958c33' : 'inherit',
+              }}
+              onClick={() => props.handleRedirectToChannel(element)}
+            >
               <ListItemIcon>
                 <QuestionAnswerIcon />
               </ListItemIcon>
