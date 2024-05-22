@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter'
-import { CHANNEL_URL, LOGIN_URL, LOGOUT_URL, REGISTER_URL, USER_CHANNEL_URL } from '../gateways/api/constants'
+import { CHANNEL_JOIN_URL, CHANNEL_URL, LOGIN_URL, LOGOUT_URL, REGISTER_URL, USER_CHANNEL_URL } from '../gateways/api/constants'
 import { IChannelModel } from '../gateways/api/api.types'
 import { IFormLogin, IFormSignUp } from '../../domain/entities/formModels/signup-form.entity'
 
@@ -10,6 +10,8 @@ export const mockAPIResponses = (
   if (testError) {
     // Channel
     mock.onPost(CHANNEL_URL).reply(400, getChannelErrorResponse(baseDataRes))
+    // Join Channel
+    mock.onPost(CHANNEL_JOIN_URL).reply(400, getChannelJoinErrorResponse(baseDataRes))
     // User Registration
     mock.onPost(REGISTER_URL).reply(400, getUserRegistrationErrorResponse(baseDataRes))
     // Login
@@ -19,6 +21,8 @@ export const mockAPIResponses = (
   } else {
     // Channel
     mock.onPost(CHANNEL_URL).reply(201, formatChannelCreateIntoResponse(baseDataRes))
+    // Join Channel
+    mock.onPost(CHANNEL_JOIN_URL).reply(200, formatChannelJoinIntoResponse(baseDataRes))
     // Retrieve User Channels
     mock.onGet(USER_CHANNEL_URL).reply(200, formatUserChannelsIntoResponse())
     // User Registration
@@ -142,5 +146,25 @@ const formatUserChannelsIntoResponse = () => {
         }
       }
     ]
+  }
+}
+
+/** Join Channel */
+const getChannelJoinErrorResponse = (data: string) => {
+  return {
+    "invite_code": [
+      data
+    ]
+  }
+}
+
+const formatChannelJoinIntoResponse = (data: { name: string, code: string }) => {
+  return {
+    "id": 2,
+    "name": data.name,
+    "invite_code": data.code,
+    "created_at": "2024-01-24",
+    "updated_at": null,
+    "delted_at": null
   }
 }
