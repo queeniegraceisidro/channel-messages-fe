@@ -13,10 +13,12 @@ import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { useNavigate } from 'react-router-dom';
+import { IChannel } from '../../../../../domain/entities/channel/channel.entity';
 
 export interface ISidebarViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
+  channels: IChannel[]
 }
 
 const drawerWidth: number = 240;
@@ -88,12 +90,18 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
         <ListSubheader component="div" inset>
           Joined Channels
         </ListSubheader>
-        <ListItemButton>
-          <ListItemIcon>
-            <QuestionAnswerIcon />
-          </ListItemIcon>
-          <ListItemText primary="Sample Channel" />
-        </ListItemButton>
+        {
+          props.channels.map((element) => {
+            return <span key={element.id}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <QuestionAnswerIcon />
+                </ListItemIcon>
+                <ListItemText primary={element.name} />
+              </ListItemButton>
+            </span>
+          })
+        }
       </List>
     </Drawer>
   )
