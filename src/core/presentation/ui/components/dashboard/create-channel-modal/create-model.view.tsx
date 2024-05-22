@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { Modal, Fade, Box, Backdrop, TextField, Button, Typography } from '@mui/material';
+import { useFormik } from 'formik';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -22,6 +22,14 @@ interface ICreateChannelModalViewModel {
 }
 
 const CreateChannelModalView: React.FC<ICreateChannelModalViewModel> = (props) => {
+
+  const formik = useFormik({
+    initialValues: {
+      channelName: '',
+    },
+    onSubmit: async (values) => { },
+  });
+
   return (
     <Modal
       aria-labelledby="create-channel"
@@ -45,15 +53,21 @@ const CreateChannelModalView: React.FC<ICreateChannelModalViewModel> = (props) =
             Select a channel name and invite other people to your channel to start conversing
           </Typography>
 
-          <Box component="form" onSubmit={props.handleSubmit} noValidate sx={{ mt: 1 }}>
+          <form onSubmit={formik.handleSubmit} style={{ marginTop: '20px' }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="channel"
+              id="channelName"
               label="Channel Name"
-              name="channel"
               autoFocus
+              name="channelName"
+              autoComplete="channelName"
+              value={formik.values.channelName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.channelName && Boolean(formik.errors.channelName)}
+              helperText={formik.touched.channelName && formik.errors.channelName}
             />
             <Button
               type="submit"
@@ -63,7 +77,7 @@ const CreateChannelModalView: React.FC<ICreateChannelModalViewModel> = (props) =
             >
               Create
             </Button>
-          </Box>
+          </form>
         </Box>
       </Fade>
     </Modal>
