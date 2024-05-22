@@ -1,5 +1,8 @@
 import { Modal, Fade, Box, Backdrop, TextField, Button, Typography } from '@mui/material';
 import { useFormik } from 'formik';
+import { IFormChannel } from '../../../../../domain/entities/formModels/signup-form.entity';
+import { FormRequestError } from '../../../../../domain/entities/formModels/errors.entity';
+import { toast } from 'react-toastify';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -18,7 +21,7 @@ interface ICreateChannelModalViewModel {
   children: React.ReactNode
   show: boolean
   handleClose: () => void
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  handleSubmit: (valies: IFormChannel) => void
 }
 
 const CreateChannelModalView: React.FC<ICreateChannelModalViewModel> = (props) => {
@@ -27,7 +30,20 @@ const CreateChannelModalView: React.FC<ICreateChannelModalViewModel> = (props) =
     initialValues: {
       channelName: '',
     },
-    onSubmit: async (values) => { },
+    onSubmit: async (values) => {
+      try {
+        await props.handleSubmit(values)
+        formik.resetForm();
+        props.handleClose();
+        toast.success(`Successfully Created channel ${values.channelName}`)
+      } catch (error) {
+        if (error instanceof FormRequestError) {
+          formik.setErrors(error.data);
+        } else {
+          throw Error("Uncaught exception while creating channel")
+        }
+      }
+    },
   });
 
   return (

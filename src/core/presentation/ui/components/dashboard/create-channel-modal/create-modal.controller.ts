@@ -1,5 +1,6 @@
 import ChannelApiGateway from "../../../../../data/gateways/api/services/channel.gateway"
 import ChannelRepository from "../../../../../data/gateways/api/services/channel.repository"
+import { IFormChannel } from "../../../../../domain/entities/formModels/signup-form.entity"
 import CreateChannelUseCase from "../../../../../domain/usecases/channel/create-channel/create-channel.usecase"
 
 export default class CreateChannelModalController {
@@ -11,10 +12,7 @@ export default class CreateChannelModalController {
     )
   }
 
-  async createKnowledgebase(data: FormData) {
-    const channelName = data.get('channel') as string
-    if (channelName) {
-      await this.createChannelUseCase.execute(channelName)
-    }
+  async createChannel(data: IFormChannel) {
+    await this.createChannelUseCase.execute(data.channelName)
   }
 }

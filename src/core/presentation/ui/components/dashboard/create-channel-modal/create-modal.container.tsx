@@ -1,5 +1,6 @@
 import CreateChannelModalController from './create-modal.controller'
 import CreateChannelModalView from './create-model.view'
+import { IFormChannel } from '../../../../../domain/entities/formModels/signup-form.entity'
 
 interface ICreateChannelModalContainerViewModel {
   children?: React.ReactNode
@@ -10,8 +11,8 @@ interface ICreateChannelModalContainerViewModel {
 export const CreateChannelModal: React.FC<ICreateChannelModalContainerViewModel> = (props) => {
   const controller = new CreateChannelModalController()
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    controller.createKnowledgebase(new FormData(event.currentTarget))
+  const handleSubmit = async (values: IFormChannel) => {
+    await controller.createChannel(values)
   };
 
   return <CreateChannelModalView
