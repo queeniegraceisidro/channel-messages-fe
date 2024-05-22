@@ -21,3 +21,8 @@ export const USER_CHANNEL_URL = `/messenger/user/`
 export const LOGIN_URL = `/users/auth/login/`
 export const LOGOUT_URL = `/users/auth/logout/`
 export const REGISTER_URL = `/users/auth/register`
+
+/**
+ * WEBSOCKET URLS
+ */
+export const WEBSOCKET_CHANNEL_URL = `/channel/`
