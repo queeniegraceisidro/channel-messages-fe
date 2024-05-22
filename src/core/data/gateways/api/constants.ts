@@ -6,6 +6,11 @@
 export const CHANNEL_URL = `/messenger/channel/`
 
 /**
+ * USER CHANNEL URLS
+ */
+export const USER_CHANNEL_URL = `/messenger/user/`
+
+/**
  * AUTH URLS
  */
 export const LOGIN_URL = `/users/auth/login/`
