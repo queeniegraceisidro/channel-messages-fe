@@ -1,5 +1,8 @@
-import * as React from 'react';
 import { Modal, Fade, Box, Backdrop, TextField, Button, Typography } from '@mui/material';
+import { useFormik } from 'formik';
+import { IFormJoinChannel } from '../../../../../domain/entities/formModels/signup-form.entity';
+import { FormRequestError } from '../../../../../domain/entities/formModels/errors.entity';
+import { toast } from 'react-toastify';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -18,10 +21,31 @@ interface IJoinChannelModalViewModel {
   children: React.ReactNode
   show: boolean
   handleClose: () => void
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  handleSubmit: (values: IFormJoinChannel) => void
 }
 
 const JoinChannelModalView: React.FC<IJoinChannelModalViewModel> = (props) => {
+
+  const formik = useFormik({
+    initialValues: {
+      inviteCode: '',
+    },
+    onSubmit: async (values) => {
+      try {
+        await props.handleSubmit(values)
+        formik.resetForm();
+        props.handleClose();
+        toast.success(`Successfully Joined channel`)
+      } catch (error) {
+        if (error instanceof FormRequestError) {
+          formik.setErrors(error.data);
+        } else {
+          throw Error("Uncaught exception while creating channel")
+        }
+      }
+    },
+  });
+
   return (
     <Modal
       aria-labelledby="join-channel"
@@ -42,17 +66,23 @@ const JoinChannelModalView: React.FC<IJoinChannelModalViewModel> = (props) => {
             Join Channel
           </Typography>
           <Typography id="join-channel-modal-description" sx={{ mt: 2 }}>
-            Enter a channel name to join an existing conversation
+            Enter an invite code to join an existing conversation
           </Typography>
 
-          <Box component="form" onSubmit={props.handleSubmit} noValidate sx={{ mt: 1 }}>
+          <form onSubmit={formik.handleSubmit} style={{ marginTop: '20px' }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="channel"
-              label="Channel Name"
-              name="channel"
+              id="inviteCode"
+              label="Invite Code"
+              name="inviteCode"
+              autoComplete="inviteCode"
+              value={formik.values.inviteCode}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.inviteCode && Boolean(formik.errors.inviteCode)}
+              helperText={formik.touched.inviteCode && formik.errors.inviteCode}
               autoFocus
             />
             <Button
@@ -63,7 +93,7 @@ const JoinChannelModalView: React.FC<IJoinChannelModalViewModel> = (props) => {
             >
               Join
             </Button>
-          </Box>
+          </form>
         </Box>
       </Fade>
     </Modal>

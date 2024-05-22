@@ -4,6 +4,7 @@
 
 // Create channel
 export const CHANNEL_URL = `/messenger/channel/`
+export const CHANNEL_JOIN_URL = `/messenger/channel/join/`
 
 /**
  * USER CHANNEL URLS

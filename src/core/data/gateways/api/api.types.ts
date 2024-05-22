@@ -31,6 +31,7 @@ export interface IErrorResponseModel {
 
 export interface IChannelModel extends IBaseAPIModel {
   name: string
+  invite_code: string
   created_at: string
   updated_at?: string
   deleted_at?: string
