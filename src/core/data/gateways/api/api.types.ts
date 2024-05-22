@@ -48,3 +48,7 @@ export interface IUserWithAccessTokenModel extends IBaseAPIModel {
   refresh: string
   user: IUserModel
 }
+
+export interface ILogoutResponseModel {
+	detail: string
+}
