@@ -6,8 +6,13 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-import { mainListItems, secondaryListItems } from './listItems';
-
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import { useNavigate } from 'react-router-dom';
 
 export interface ISidebarViewModel {
   onToggleSidebar: () => void
@@ -44,6 +49,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
+  const navigate = useNavigate();
+  const currentPage = 'dashboard'
+
+  const handleRedirectToDashboard = () => {
+    navigate('/dashboard');
+  }
 
   return (
     <Drawer variant="permanent" open={props.sidebarOpen}>
@@ -61,9 +72,28 @@ export const SidebarView: React.FC<ISidebarViewModel> = (props) => {
       </Toolbar>
       <Divider />
       <List component="nav">
-        {mainListItems}
+        <ListItemButton
+          key={'dashboard'}
+          sx={{
+            backgroundColor: currentPage === 'dashboard' ? '#21958c33' : 'inherit',
+          }}
+          onClick={handleRedirectToDashboard}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItemButton>
         <Divider sx={{ my: 1 }} />
-        {secondaryListItems}
+        <ListSubheader component="div" inset>
+          Joined Channels
+        </ListSubheader>
+        <ListItemButton>
+          <ListItemIcon>
+            <QuestionAnswerIcon />
+          </ListItemIcon>
+          <ListItemText primary="Sample Channel" />
+        </ListItemButton>
       </List>
     </Drawer>
   )
