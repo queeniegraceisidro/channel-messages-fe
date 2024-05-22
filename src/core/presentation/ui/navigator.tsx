@@ -37,7 +37,7 @@ export const Navigator = () => {
         <Route path='/' element={<AlreadyLoggedInRoute element={<LoginContainer />} />} />
         <Route path='/dashboard' element={<PrivateRoute element={<DashboardContainer />} />} />
         <Route path='/signup' element={<AlreadyLoggedInRoute element={<SignupContainer />} />} />
-        <Route path='/channel' element={<PrivateRoute element={<ChannelContainer />} />} />
+        <Route path='/channel/:channelName' element={<PrivateRoute element={<ChannelContainer />} />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

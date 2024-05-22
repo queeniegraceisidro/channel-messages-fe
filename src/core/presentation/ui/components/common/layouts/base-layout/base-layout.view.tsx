@@ -13,6 +13,7 @@ export interface IBaseLayoutViewModel {
   children: React.ReactNode
   onToggleSidebar: () => void
   sidebarOpen: boolean
+  currentPage: string
 }
 
 
@@ -26,7 +27,9 @@ const BaseLayoutView: React.FC<IBaseLayoutViewModel> = (props) => {
           sidebarOpen={props.sidebarOpen} />
         <SidebarContainer
           onToggleSidebar={props.onToggleSidebar}
-          sidebarOpen={props.sidebarOpen} />
+          sidebarOpen={props.sidebarOpen}
+          currentPage={props.currentPage}
+        />
         <Box
           component="main"
           sx={{
