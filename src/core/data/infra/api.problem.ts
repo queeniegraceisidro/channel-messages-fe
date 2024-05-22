@@ -31,11 +31,11 @@ export function getGeneralApiProblem (response: ApiResponse<any>): IGeneralApiPr
         case 401:
           return { kind: 'unauthorized', temporary: true, requestError: null}
         case 403:
-          return { kind: 'forbidden', temporary: true, requestError: null}
+          return { kind: 'forbidden', temporary: false, requestError: null}
         case 404:
-          return { kind: 'not-found', temporary: true, requestError: null}
+          return { kind: 'not-found', temporary: false, requestError: null}
         default:
-          return { kind: 'rejected', temporary: true, requestError: null}
+          return { kind: 'rejected', temporary: false, requestError: null}
       }
     case 'CANCEL_ERROR':
       return null
