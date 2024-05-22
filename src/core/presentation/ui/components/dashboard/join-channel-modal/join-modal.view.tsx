@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { Modal, Fade, Box, Backdrop, TextField, Button, Typography } from '@mui/material';
+import { useFormik } from 'formik';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -22,6 +22,14 @@ interface IJoinChannelModalViewModel {
 }
 
 const JoinChannelModalView: React.FC<IJoinChannelModalViewModel> = (props) => {
+
+  const formik = useFormik({
+    initialValues: {
+      inviteCode: '',
+    },
+    onSubmit: async (values) => { },
+  });
+
   return (
     <Modal
       aria-labelledby="join-channel"
@@ -42,17 +50,23 @@ const JoinChannelModalView: React.FC<IJoinChannelModalViewModel> = (props) => {
             Join Channel
           </Typography>
           <Typography id="join-channel-modal-description" sx={{ mt: 2 }}>
-            Enter a channel name to join an existing conversation
+            Enter an invite code to join an existing conversation
           </Typography>
 
-          <Box component="form" onSubmit={props.handleSubmit} noValidate sx={{ mt: 1 }}>
+          <form onSubmit={formik.handleSubmit} style={{ marginTop: '20px' }}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="channel"
-              label="Channel Name"
-              name="channel"
+              id="inviteCode"
+              label="Invite Code"
+              name="inviteCode"
+              autoComplete="inviteCode"
+              value={formik.values.inviteCode}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.inviteCode && Boolean(formik.errors.inviteCode)}
+              helperText={formik.touched.inviteCode && formik.errors.inviteCode}
               autoFocus
             />
             <Button
@@ -63,7 +77,7 @@ const JoinChannelModalView: React.FC<IJoinChannelModalViewModel> = (props) => {
             >
               Join
             </Button>
-          </Box>
+          </form>
         </Box>
       </Fade>
     </Modal>
