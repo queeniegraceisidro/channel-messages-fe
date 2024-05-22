@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IChannel, IPagedChannel, PagedChannelEntity } from "../../../../domain/entities/channel/channel.entity";
+import { IChannel } from "../../../../domain/entities/channel/channel.entity";
 
 interface IChannelState {
-  channel: IPagedChannel,
+  channels: IChannel[],
 }
 
 const initialState: IChannelState = {
-  channel: new PagedChannelEntity().getCurrentValuesAsJSON(),
+  channels: [],
 }
 
 export const channelSlice = createSlice({
@@ -15,7 +15,10 @@ export const channelSlice = createSlice({
   reducers: {
     addNewChannel(state, action: PayloadAction<IChannel>) {
       const newChannel = action.payload
-      state.channel.results = [...state.channel.results, newChannel]
+      state.channels = [...state.channels, newChannel]
+    },
+    initializeUserChannels(state, action: PayloadAction<IChannel[]>) {
+      state.channels = action.payload
     },
   },
 })
@@ -23,5 +26,6 @@ export const channelSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   addNewChannel,
+  initializeUserChannels
 } = channelSlice.actions
 export default channelSlice.reducer

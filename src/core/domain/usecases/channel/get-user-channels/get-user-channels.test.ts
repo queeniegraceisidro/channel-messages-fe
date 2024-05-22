@@ -1,13 +1,13 @@
 import ChannelApiGateway from "../../../../data/gateways/api/services/channel.gateway"
 import ChannelRepository from "../../../../data/gateways/api/services/channel.repository"
-import CreateChannelUseCase from "./create-channel.usecase"
 import { mockAPIResponses } from "../../../../data/infra/api-mock"
 import { store } from "../../../../presentation/presenters/store/store"
 import { faker } from '@faker-js/faker';
+import GetUserChannelsUseCase from "./get-user-channels.usecase"
 
-describe('Test create channel use case', () => {
+describe('Test get all the user channels use case', () => {
   let gateway: ChannelApiGateway
-  let useCase: CreateChannelUseCase
+  let useCase: GetUserChannelsUseCase
   let repo: ChannelRepository
   let channel = faker.word.words()
 
@@ -17,12 +17,12 @@ describe('Test create channel use case', () => {
   })
 
   /**
-   * Given: error
-   * Expect: No channel created
+   * Given: Error
+   * Expect: No channel retrieved
    */
   test('Execute with error', async () => {
     const simulatedError = {
-      name: "This field is required."
+      name: "No channels found."
     }
 
     // Arrange
@@ -30,18 +30,18 @@ describe('Test create channel use case', () => {
     mockAPIResponses(gateway.apiSauce.axiosInstance, true, simulatedError)
 
     // Initialize proper classes before we act in our use case...
-    useCase = new CreateChannelUseCase(
-      gateway, new ChannelRepository()
+    useCase = new GetUserChannelsUseCase(
+      gateway, repo
     )
 
-    // Assert that we now have 0 channels stored in our store
+    // Assert still have no channels in our store
     let state = store.getState()
     expect(state.channelState.channels.length).toBe(0)
   })
 
   /**
-   * Given: channel_name
-   * Expect: A new channel created from the channel name
+   * Given: Logged-in user that has joined 3 channels
+   * Expect: A list of all the user's joined channel is retrieved
    */
   test('execute', async () => {
     // Arrange
@@ -49,8 +49,8 @@ describe('Test create channel use case', () => {
     mockAPIResponses(gateway.apiSauce.axiosInstance, false, channel)
 
     // Initialize proper classes before we act in our use case...
-    useCase = new CreateChannelUseCase(
-      gateway, new ChannelRepository()
+    useCase = new GetUserChannelsUseCase(
+      gateway, repo
     )
 
     // Check that we don't have any channel state at the moment
@@ -58,12 +58,11 @@ describe('Test create channel use case', () => {
     expect(state.channelState.channels.length).toBe(0)
 
     // Act
-    await useCase.execute(channel)
+    await useCase.execute()
     state = store.getState()
 
     // Assert
-    // Assert that we now have 1 channel stored in our store, and it has the same channel name.
-    expect(state.channelState.channels.length).toBe(1)
-    expect(state.channelState.channels[0].name).toBe(channel)
+    // Assert that the number of channels has the same with the channels joined by the user
+    expect(state.channelState.channels.length).toBe(3)
   })
 })

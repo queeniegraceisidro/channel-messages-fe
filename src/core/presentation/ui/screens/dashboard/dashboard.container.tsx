@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DashboardView from './dashboard.view'
+import DashboardController from './dashboard.controller';
 
 export interface IDashboardContainerViewModel {
   children?: React.ReactNode
@@ -12,6 +13,15 @@ export const DashboardContainer: React.FC<IDashboardContainerViewModel> = (props
   const handleClose = () => setOpen(false);
   const handleJoinChannelOpen = () => setJoinChannelOpen(true);
   const handleJoinChannelClose = () => setJoinChannelOpen(false);
+
+  useEffect(() => {
+    const controller = new DashboardController()
+    const handleInitalized = async () => {
+      await controller.getUserChannels()
+    }
+    handleInitalized()
+  }, [])
+
 
   return <DashboardView
     children={props.children}

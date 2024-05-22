@@ -1,5 +1,4 @@
 import { IBaseDataModelEntity } from '../base/base.entity'
-import PagedListEntity from '../base/base.paged.entity'
 
 export interface IChannel {
   id: number
@@ -39,29 +38,5 @@ export default class ChannelEntity implements IBaseDataModelEntity {
       'createdAt': '2024-01-27 05:38 PM'
     })
     return channel
-  }
-}
-
-export interface IPagedChannel {
-  results: IChannel[]
-  next: string
-  previous: string
-  totalPages: number
-  count: number,
-  currentPageNumber: number
-}
-
-
-export class PagedChannelEntity extends PagedListEntity<IChannel> {
-
-  constructor(model: IPagedChannel | null = null) {
-    super(model);
-    if (model !== null) {
-      this.results = model.results;
-    }
-  }
-
-  getCurrentValuesAsJSON(): IPagedChannel {
-    return Object.assign({}, this);
   }
 }
