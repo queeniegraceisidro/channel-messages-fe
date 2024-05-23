@@ -2,19 +2,22 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IChannel } from "../../../../domain/entities/channel/channel.entity";
 import { IMessage } from "../../../../domain/entities/message/message.entity";
 import { IPagedMessageEntityWithCursors } from "../../../../domain/entities/message/channel-messages.entity";
+import { IPagedChannelEntity } from "../../../../domain/entities/channel/user-channels.entity";
 
 interface IChannelState {
   channels: IChannel[],
   currentChannel: IChannel | undefined
   messages: IMessage[]
   nextMessageCursor: string | null
+  nextChannelsPage: string | null
 }
 
 const initialState: IChannelState = {
   channels: [],
   currentChannel: undefined,
   messages: [],
-  nextMessageCursor: null
+  nextMessageCursor: null,
+  nextChannelsPage: null
 }
 
 export const channelSlice = createSlice({
@@ -23,16 +26,29 @@ export const channelSlice = createSlice({
   reducers: {
     addNewChannel(state, action: PayloadAction<IChannel>) {
       const newChannel = action.payload
-      state.channels = [...state.channels, newChannel]
+      state.channels = [newChannel, ...state.channels]
     },
-    initializeUserChannels(state, action: PayloadAction<IChannel[]>) {
-      state.channels = action.payload
+    initializeUserChannels(state, action: PayloadAction<IPagedChannelEntity>) {
+      let channels: IChannel[] = []
+      action.payload.results.forEach((result: { channel: any }) => {
+        channels.push(result.channel)
+      });
+      state.channels = channels
+      state.nextChannelsPage = action.payload.next
     },
     setCurrentChannel(state, action: PayloadAction<number>) {
       state.currentChannel = state.channels.find(channel => channel.id === action.payload);
     },
     clearCurrentChannel(state) {
       state.currentChannel = undefined;
+    },
+    appendUserChannels(state, action: PayloadAction<IPagedChannelEntity>) {
+      let channels: IChannel[] = []
+      action.payload.results.forEach((result: { channel: any }) => {
+        channels.push(result.channel)
+      });
+      state.channels = state.channels.concat(channels);
+      state.nextChannelsPage = action.payload.next
     },
     setChannelMessages(state, action: PayloadAction<IPagedMessageEntityWithCursors>) {
       state.messages = action.payload.results
@@ -57,6 +73,7 @@ export const channelSlice = createSlice({
 export const {
   addNewChannel,
   initializeUserChannels,
+  appendUserChannels,
   setCurrentChannel,
   clearCurrentChannel,
   setChannelMessages,
