@@ -5,6 +5,7 @@ import { clearCurrentChannel, setCurrentChannel } from '../../../../presenters/s
 import { useNavigate } from 'react-router-dom';
 import { IChannel } from '../../../../../domain/entities/channel/channel.entity';
 import { useEffect, useState } from 'react';
+import SidebarController from './sidebar.controller';
 
 export interface ISidebarContainerViewModel {
   onToggleSidebar: () => void
@@ -13,14 +14,16 @@ export interface ISidebarContainerViewModel {
 }
 
 export const SidebarContainer: React.FC<ISidebarContainerViewModel> = (props) => {
+  const controller = new SidebarController()
   const channels = useAppSelector(state => state.channelState.channels);
+  const nextPage = useAppSelector(state => state.channelState.nextChannelsPage);
   const currentChannel = useAppSelector(state => state.channelState.currentChannel);
+  const [selectedChannelId, setSelectedChannelId] = useState<number | undefined>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const [selectedChannelId, setSelectedChannelId] = useState(0);
 
   const handleRedirectToDashboard = () => {
     navigate('/dashboard');
-    store.dispatch(clearCurrentChannel())
   }
 
   const handleRedirectToChannel = (channel: IChannel) => {
@@ -32,8 +35,19 @@ export const SidebarContainer: React.FC<ISidebarContainerViewModel> = (props) =>
   useEffect(() => {
     if (currentChannel) {
       setSelectedChannelId(currentChannel.id);
+    } else {
+      setSelectedChannelId(undefined);
+      store.dispatch(clearCurrentChannel())
     }
   }, [currentChannel])
+
+  const loadChannels = async () => {
+    setIsLoading(true);
+    if (nextPage != null) {
+      await controller.getUserChannels(nextPage)
+    }
+    setIsLoading(false);
+  };
 
   return <SidebarView
     onToggleSidebar={props.onToggleSidebar}
@@ -43,5 +57,7 @@ export const SidebarContainer: React.FC<ISidebarContainerViewModel> = (props) =>
     currentPage={props.currentPage}
     handleRedirectToDashboard={handleRedirectToDashboard}
     handleRedirectToChannel={handleRedirectToChannel}
+    handleLoadChannels={loadChannels}
+    isLoading={isLoading}
   />
 }
