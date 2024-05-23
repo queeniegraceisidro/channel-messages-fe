@@ -5,10 +5,10 @@ import SendIcon from '@mui/icons-material/Send';
 import { IChannel } from '../../../../domain/entities/channel/channel.entity';
 import { IMessage } from '../../../../domain/entities/message/message.entity';
 import { store } from '../../../presenters/store/store';
-import { WEBSOCKET_URL } from '../../../../../config';
 import { WEBSOCKET_CHANNEL_DETAIL_URL } from '../../../../data/gateways/api/constants';
 import { addChannelMessage } from '../../../presenters/store/reducers/channels.reducer';
 import { mapMessageAttributes } from '../../../../data/gateways/api/services/mappers/messages.mappers';
+import { Socket } from '../../../../data/infra/websockets/socket';
 
 
 export interface IChannelViewModel {
@@ -27,27 +27,30 @@ const ChannelView: React.FC<IChannelViewModel> = (props) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const SOCKET_URL = `${WEBSOCKET_URL}${WEBSOCKET_CHANNEL_DETAIL_URL(props.channel!.id)}`
-    const socket = new WebSocket(SOCKET_URL);
 
-    socket.onopen = () => {
-      console.log("WebSocket connection established.");
-    };
+    const socket = new Socket();
+    socket.connect(`${WEBSOCKET_CHANNEL_DETAIL_URL(props.channel!.id)}`);
 
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data).message
-      const parsedMessage: IMessage = mapMessageAttributes(message)
-      store.dispatch(addChannelMessage(parsedMessage))
-    };
+    socket.on('open', (event) => {
+      console.log(`WebSocket connection for specific channel established.`);
+    });
 
-    socket.onclose = () => {
-      console.log("WebSocket connection closed.");
-    };
+    socket.on('message', (event) => {
+      const message = JSON.parse(event.data).message;
+      const parsedMessage: IMessage = mapMessageAttributes(message);
+      store.dispatch(addChannelMessage(parsedMessage));
+    });
+
+    socket.on('close', (event) => {
+      console.log(`WebSocket connection for specific channel is closed.`);
+    });
 
     return () => {
       socket.close();
     };
+
   }, [props.channel]);
+
 
   useEffect(() => {
 
