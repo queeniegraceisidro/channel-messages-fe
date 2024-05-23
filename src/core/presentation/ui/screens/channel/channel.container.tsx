@@ -13,6 +13,7 @@ export const ChannelContainer: React.FC<IChannelContainerViewModel> = (props) =>
   const controller = new ChannelController()
   const selectedChannel = useAppSelector(state => state.channelState.currentChannel);
   const messages = useAppSelector(state => state.channelState.messages);
+  const nextCursor = useAppSelector(state => state.channelState.nextMessageCursor);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { channelId } = useParams();
   const navigate = useNavigate();
@@ -36,7 +37,9 @@ export const ChannelContainer: React.FC<IChannelContainerViewModel> = (props) =>
 
   const loadMessages = async () => {
     setIsLoading(true);
-    // TODO: Pagination
+    if (selectedChannel !== undefined && nextCursor != null) {
+      await controller.retrieveChannelMessages(selectedChannel.id, nextCursor)
+    }
     setIsLoading(false);
   };
 

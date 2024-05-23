@@ -1,20 +1,20 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { IChannel } from "../../../../domain/entities/channel/channel.entity";
 import { IMessage } from "../../../../domain/entities/message/message.entity";
-import { IPagedMessageEntity } from "../../../../domain/entities/message/channel-messages.entity";
+import { IPagedMessageEntityWithCursors } from "../../../../domain/entities/message/channel-messages.entity";
 
 interface IChannelState {
   channels: IChannel[],
   currentChannel: IChannel | undefined
   messages: IMessage[]
-  hasNextMessagePage: boolean
+  nextMessageCursor: string | null
 }
 
 const initialState: IChannelState = {
   channels: [],
   currentChannel: undefined,
   messages: [],
-  hasNextMessagePage: false
+  nextMessageCursor: null
 }
 
 export const channelSlice = createSlice({
@@ -34,9 +34,13 @@ export const channelSlice = createSlice({
     clearCurrentChannel(state) {
       state.currentChannel = undefined;
     },
-    setChannelMessages(state, action: PayloadAction<IPagedMessageEntity>) {
+    setChannelMessages(state, action: PayloadAction<IPagedMessageEntityWithCursors>) {
       state.messages = action.payload.results
-      state.hasNextMessagePage = action.payload.next ? true : false
+      state.nextMessageCursor = action.payload.nextCursor;
+    },
+    appendChannelMessages(state, action: PayloadAction<IPagedMessageEntityWithCursors>) {
+      state.messages = state.messages.concat(action.payload.results);
+      state.nextMessageCursor = action.payload.nextCursor;
     },
     addChannelMessage(state, action: PayloadAction<IMessage>) {
       const newMessage = action.payload
@@ -56,6 +60,7 @@ export const {
   setCurrentChannel,
   clearCurrentChannel,
   setChannelMessages,
-  addChannelMessage
+  addChannelMessage,
+  appendChannelMessages
 } = channelSlice.actions
 export default channelSlice.reducer

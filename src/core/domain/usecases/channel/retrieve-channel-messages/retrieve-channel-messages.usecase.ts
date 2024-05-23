@@ -1,11 +1,12 @@
-import { IPagedMessageEntity } from "../../../entities/message/channel-messages.entity"
+import { IPagedMessageEntityWithCursors } from "../../../entities/message/channel-messages.entity"
 
 export interface IRetrieveChannelMessagesDataGateway {
-  getChannelMessages: (id: number) => Promise<any>
+  getChannelMessages: (id: number, cursor: string | null) => Promise<any>
 }
 
 export interface IRetrieveChannelMessagesDataRepository {
-  setChannelMessages: (messages: IPagedMessageEntity) => void
+  setChannelMessages: (messages: IPagedMessageEntityWithCursors) => void
+  appendChannelMessages: (messages: IPagedMessageEntityWithCursors) => void
 }
 
 export default class RetrieveChannelMessagesUseCase {
@@ -14,8 +15,19 @@ export default class RetrieveChannelMessagesUseCase {
     private readonly dataRepository: IRetrieveChannelMessagesDataRepository,
   ) {
   }
-  async execute(channelId: number) {
-    const messages = await this.dataGateway.getChannelMessages(channelId)
-    this.dataRepository.setChannelMessages(messages)
+
+  async execute(channelId: number, cursor: string | null) {
+    try {
+      const messages = await this.dataGateway.getChannelMessages(channelId, cursor);
+      // TODO: Maybe separate this?
+      if (cursor == null) {
+        this.dataRepository.setChannelMessages(messages);
+      } else {
+        this.dataRepository.appendChannelMessages(messages)
+      }
+    } catch (error) {
+      throw error;
+    }
   }
+
 }
