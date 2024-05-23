@@ -1,12 +1,13 @@
-import { IChannel } from '../../../entities/channel/channel.entity'
+import { IPagedChannelEntity } from '../../../entities/channel/user-channels.entity'
 
 
 export interface IGetUserChannelsDataGateway {
-  getUserChannels: () => Promise<any>
+  getUserChannels: (page?: number) => Promise<any>
 }
 
 export interface IGetUserChannelsDataRepository {
-  initializeUserChannels: (channels: IChannel[]) => void
+  initializeUserChannels: (channels: IPagedChannelEntity) => void
+  appendUserChannels: (channels: IPagedChannelEntity) => void
 }
 
 export default class GetUserChannelsUseCase {
@@ -15,14 +16,14 @@ export default class GetUserChannelsUseCase {
     private readonly dataRepository: IGetUserChannelsDataRepository,
   ) {
   }
-  async execute() {
+  async execute(iniitalizeList: boolean = false, page?: number) {
     try {
-      const userChannels = await this.dataGateway.getUserChannels()
-      let channels: IChannel[] = []
-      userChannels.results.forEach((result: { channel: any }) => {
-        channels.push(result.channel)
-      });
-      this.dataRepository.initializeUserChannels(channels)
+      const userChannels = await this.dataGateway.getUserChannels(page)
+      if (iniitalizeList) {
+        await this.dataRepository.appendUserChannels(userChannels)
+      } else {
+        await this.dataRepository.initializeUserChannels(userChannels)
+      }
     } catch (error: any) {
       throw error
     }

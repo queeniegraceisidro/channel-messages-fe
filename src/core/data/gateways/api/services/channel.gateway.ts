@@ -42,16 +42,19 @@ export default class ChannelApiGateway extends Api {
     return channel.getCurrentValuesAsJSON()
   }
 
-  async getUserChannels(): Promise<IPagedChannelEntity> {
+  async getUserChannels(page?: number): Promise<IPagedChannelEntity> {
     try {
-      const response = await this._getUserChannels()
+      const response = await this._getUserChannels(page)
       return this._mapUserChannelsFromResponse(response)
     } catch (error) {
       throw error
     }
   }
 
-  private async _getUserChannels(): Promise<IPagedAPIViewModel<IUserChannelModel>> {
+  private async _getUserChannels(page?: number): Promise<IPagedAPIViewModel<IUserChannelModel>> {
+    if (page) {
+      return await this.get(USER_CHANNEL_URL, { 'page': page })
+    }
     return await this.get(USER_CHANNEL_URL)
   }
 
