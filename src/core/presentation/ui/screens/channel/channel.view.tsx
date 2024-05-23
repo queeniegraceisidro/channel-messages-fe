@@ -95,7 +95,7 @@ const ChannelView: React.FC<IChannelViewModel> = (props) => {
     <>
       {
         props.channel !== undefined ?
-          <BaseLayoutContainer currentPage={props.channel.name}>
+          <BaseLayoutContainer currentPage={props.channel.name} inviteCode={props.channel.inviteCode}>
             <Grid
               container
               direction="row"

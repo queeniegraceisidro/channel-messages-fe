@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,12 +5,19 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Zoom from '@mui/material/Zoom';
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 export interface INavbarViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
   handleLogout: () => void
   currentPage: string
+  inviteCode?: string
+  handleCopyInviteCode: (inviteCode: string) => void
+  tooltipText: string
 }
 
 const drawerWidth: number = 240;
@@ -67,9 +73,17 @@ export const NavbarView: React.FC<INavbarViewModel> = (props) => {
         >
           {props.currentPage}
         </Typography>
-        <IconButton color="inherit" onClick={props.handleLogout}>
+        {props.inviteCode ?
+          <Tooltip TransitionComponent={Zoom} title={props.tooltipText}>
+            <Button onClick={() => props.handleCopyInviteCode(props.inviteCode!)} startIcon={<ContentCopyIcon />} sx={{ mr: 2, color: 'white' }}>
+              {`Invite Code - ${props.inviteCode}`}
+            </Button>
+          </Tooltip>
+          : null}
+
+        {props.inviteCode === undefined ? <IconButton color="inherit" onClick={props.handleLogout}>
           <LogoutIcon />
-        </IconButton>
+        </IconButton> : ''}
       </Toolbar>
     </AppBar>
   )

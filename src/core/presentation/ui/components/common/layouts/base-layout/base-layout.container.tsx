@@ -5,6 +5,7 @@ import BaseLayoutView from "./base-layout.view"
 export interface IBaseLayoutContainerViewModel {
   children?: React.ReactNode
   currentPage: string
+  inviteCode?: string
 }
 
 export const BaseLayoutContainer: React.FC<IBaseLayoutContainerViewModel> = (props) => {
@@ -17,5 +18,6 @@ export const BaseLayoutContainer: React.FC<IBaseLayoutContainerViewModel> = (pro
     onToggleSidebar={toggleSidebar}
     sidebarOpen={open}
     currentPage={props.currentPage}
+    inviteCode={props.inviteCode}
   />
 }
