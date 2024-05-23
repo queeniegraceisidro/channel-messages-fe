@@ -7,6 +7,7 @@ export interface INavbarContainerViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
   currentPage: string
+  inviteCode?: string
 }
 
 export const NavbarContainer: React.FC<INavbarContainerViewModel> = (props) => {
@@ -21,6 +22,7 @@ export const NavbarContainer: React.FC<INavbarContainerViewModel> = (props) => {
     sidebarOpen={props.sidebarOpen}
     currentPage={props.currentPage}
     handleLogout={handleLogout}
+    inviteCode={props.inviteCode}
   />
 
 }

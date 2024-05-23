@@ -12,6 +12,7 @@ export interface INavbarViewModel {
   sidebarOpen: boolean
   handleLogout: () => void
   currentPage: string
+  inviteCode?: string
 }
 
 const drawerWidth: number = 240;
@@ -66,6 +67,9 @@ export const NavbarView: React.FC<INavbarViewModel> = (props) => {
           sx={{ flexGrow: 1 }}
         >
           {props.currentPage}
+        </Typography>
+        <Typography variant="subtitle1" sx={{ mr: 2 }}>
+          {props.inviteCode ? `Invite Code - ${props.inviteCode}` : ""}
         </Typography>
         <IconButton color="inherit" onClick={props.handleLogout}>
           <LogoutIcon />

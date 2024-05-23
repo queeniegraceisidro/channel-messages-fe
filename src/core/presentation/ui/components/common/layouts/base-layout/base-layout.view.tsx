@@ -13,6 +13,7 @@ export interface IBaseLayoutViewModel {
   onToggleSidebar: () => void
   sidebarOpen: boolean
   currentPage: string
+  inviteCode?: string
 }
 
 
@@ -24,7 +25,8 @@ const BaseLayoutView: React.FC<IBaseLayoutViewModel> = (props) => {
         <NavbarContainer
           currentPage={props.currentPage}
           onToggleSidebar={props.onToggleSidebar}
-          sidebarOpen={props.sidebarOpen} />
+          sidebarOpen={props.sidebarOpen}
+          inviteCode={props.inviteCode} />
         <SidebarContainer
           onToggleSidebar={props.onToggleSidebar}
           sidebarOpen={props.sidebarOpen}
