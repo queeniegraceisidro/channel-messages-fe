@@ -45,7 +45,7 @@ export const ChannelContainer: React.FC<IChannelContainerViewModel> = (props) =>
 
   return <ChannelView
     children={props.children}
-    channelName={selectedChannel}
+    channel={selectedChannel}
     messages={messages}
     handleSendMessage={handleSendMessage}
     handleLoadMessage={loadMessages}
